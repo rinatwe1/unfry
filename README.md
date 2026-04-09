@@ -12,7 +12,19 @@ Unfry is the memory layer that takes that load off.
 
 Two commands. No background process. No setup beyond copy-paste.
 
-**`/unfry`** — run at the end of a session. Reads the conversation, extracts what matters, saves it.
+**`/wrap`** — run at the end of a session. Reads the conversation, extracts what matters, saves it.
+
+```bash
+mkdir -p ~/.claude/skills/wrap
+curl -o ~/.claude/skills/wrap/SKILL.md \
+  https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/wrap/SKILL.md
+```
+
+Then at the end of any session: `/wrap`
+
+---
+
+**`/unfry`** — run at the start of a new session. Loads the previous session's summary so you pick up where you left off.
 
 ```bash
 mkdir -p ~/.claude/skills/unfry
@@ -20,19 +32,7 @@ curl -o ~/.claude/skills/unfry/SKILL.md \
   https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/unfry/SKILL.md
 ```
 
-Then in any Claude Code session: `/unfry`
-
----
-
-**`/recall`** — run at the start of a new session. Loads the previous session's summary so you pick up where you left off.
-
-```bash
-mkdir -p ~/.claude/skills/recall
-curl -o ~/.claude/skills/recall/SKILL.md \
-  https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/recall/SKILL.md
-```
-
-Then at the start of a new session: `/recall`
+Then at the start of a new session: `/unfry`
 
 ---
 
@@ -102,7 +102,7 @@ claude -p generates brain dump
        ↓
 saved to [project]/unfry-sessions/YYYY-MM-DD.md
        ↓
-/recall at next session → instant context
+/unfry at next session → instant context
 ```
 
 ---
@@ -131,7 +131,7 @@ saved to [project]/unfry-sessions/YYYY-MM-DD.md
 
 - Claude Code installed (`claude` CLI available)
 - Python 3.7+
-- macOS (daemon only — `/unfry` skill works everywhere)
+- macOS (daemon only — slash commands work everywhere)
 
 ---
 
@@ -140,8 +140,8 @@ saved to [project]/unfry-sessions/YYYY-MM-DD.md
 ```
 unfry/
 ├── skills/
-│   ├── unfry/SKILL.md      — /unfry slash command
-│   └── recall/SKILL.md     — /recall slash command
+│   ├── wrap/SKILL.md       — /wrap (end of session)
+│   └── unfry/SKILL.md      — /unfry (start of session)
 ├── daemon/
 │   ├── daemon.py           — watchdog monitor
 │   ├── summarizer.py       — JSONL reader + Claude summarizer
@@ -156,22 +156,22 @@ unfry/
 
 The best memory system is the one that works when you're tired, distracted, and moving fast.
 
-`/unfry` works because it's one command at the end of a session. The daemon works because it's zero commands.
+`/wrap` at the end. `/unfry` at the start. The daemon does both automatically.
 
-Both exist because the data is already there — Claude Code just wasn't doing anything with it.
+All built on data that was already there — Claude Code just wasn't doing anything with it.
 
 ---
 
 ## Status
 
+- [x] `/wrap` slash command
 - [x] `/unfry` slash command
-- [x] `/recall` slash command  
 - [x] Daemon — compact event detection
 - [x] Daemon — inactivity timeout
 - [x] macOS LaunchAgent installer
 - [ ] Windows support (V2)
 - [ ] Dashboard — cross-project session analytics (V2)
-- [ ] `/recall` auto-trigger on window open (V2)
+- [ ] `/unfry` auto-trigger on window open (V2)
 
 ---
 
