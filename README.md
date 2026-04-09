@@ -8,30 +8,11 @@ Unfry is the memory layer that takes that load off.
 
 ---
 
-## Two Ways to Use It
+## Way 1 — Slash Commands (30 seconds, works everywhere)
 
-### `/unfry` — Manual (30 seconds setup)
+Two commands. No background process. No setup beyond copy-paste.
 
-A slash command you run at the end of any session.
-Reads the conversation. Extracts what matters. Saves it so the next session starts informed.
-
-```
-Summary / Key Decisions / Insights / Next Steps
-```
-
-**Best for:** Anyone who wants to start. Zero friction, no background process.
-
-### Daemon — Automatic (macOS)
-
-A background process that watches your Claude Code sessions.
-Triggers automatically on compact events and session inactivity.
-Writes summaries without you doing anything.
-
-**Best for:** Heavy Claude Code users. Set it once, forget it.
-
----
-
-## Install `/unfry` (30 seconds)
+**`/unfry`** — run at the end of a session. Reads the conversation, extracts what matters, saves it.
 
 ```bash
 mkdir -p ~/.claude/skills/unfry
@@ -39,19 +20,11 @@ curl -o ~/.claude/skills/unfry/SKILL.md \
   https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/unfry/SKILL.md
 ```
 
-Then in any Claude Code session:
-
-```
-/unfry
-```
-
-Claude will summarize the session and offer to save it.
+Then in any Claude Code session: `/unfry`
 
 ---
 
-## Install `/recall`
-
-Load the previous session's context when you open a new window:
+**`/recall`** — run at the start of a new session. Loads the previous session's summary so you pick up where you left off.
 
 ```bash
 mkdir -p ~/.claude/skills/recall
@@ -59,15 +32,19 @@ curl -o ~/.claude/skills/recall/SKILL.md \
   https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/recall/SKILL.md
 ```
 
-Then at the start of a new session:
-
-```
-/recall
-```
+Then at the start of a new session: `/recall`
 
 ---
 
-## Install Daemon (macOS only)
+**Best for:** Anyone who wants to start. If you only do one thing — do this.
+
+---
+
+## Way 2 — Daemon (macOS only, fully automatic)
+
+A background process that watches your Claude Code sessions. Triggers automatically — you don't run anything.
+
+**Best for:** Heavy Claude Code users. Set it once, forget it.
 
 ```bash
 git clone https://github.com/rinatwe1/unfry.git
