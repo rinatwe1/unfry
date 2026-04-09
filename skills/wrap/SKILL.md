@@ -76,13 +76,14 @@ Show the brain dump in this format:
 
 ---
 
-### Step 3: Offer to save
+### Step 3: Save automatically
 
-Ask:
-> "Save this? (y/n) — will write to `unfry-sessions/YYYY-MM-DD-[project].md`"
+Write the brain dump to `unfry-sessions/YYYY-MM-DD-[project].md` in the current project directory.
 
-If yes → write the file to the current project directory.
-If no → done. The brain dump was the point.
+Tell the user where it was saved:
+> "Saved to `unfry-sessions/YYYY-MM-DD-[project].md`"
+
+If `--nosave` was passed → skip saving. Display only.
 
 ---
 

@@ -25,12 +25,23 @@ Read the most recent `unfry-sessions/YYYY-MM-DD-*.md` file.
 
 ### Step 3: Display it
 
-Show the content as-is, prefixed with:
+**Default:** Show the content as-is, prefixed with:
 
 ```
 🧠 /unfry — [date] — [project]
 
 [content of the file]
+```
+
+**If `--brief` was passed:** Extract only the top 3 most important things from the file — the single most critical next step, the most impactful decision, and one key insight. Format:
+
+```
+🧠 /unfry --brief — [date] — [project]
+
+**Top 3:**
+1. [most critical next step]
+2. [most impactful decision]
+3. [key insight]
 ```
 
 Then add:
@@ -42,5 +53,6 @@ Then add:
 
 - Always use the most recent file (sort by filename — YYYY-MM-DD sorts correctly)
 - If there are multiple files from the same day, show the last one
-- Don't summarize the summary — show it as-is
+- Default: don't summarize the summary — show it as-is
+- `--brief`: synthesize, don't just truncate
 - This is meant to be the first command in a new session

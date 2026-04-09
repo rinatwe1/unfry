@@ -164,11 +164,15 @@ All built on data that was already there — Claude Code just wasn't doing anyth
 
 ## Status
 
-- [x] `/wrap` slash command
-- [x] `/unfry` slash command
+- [x] `/wrap` slash command (auto-save, `--nosave` opt-out)
+- [x] `/unfry` slash command (`--brief` mode)
 - [x] Daemon — compact event detection
 - [x] Daemon — inactivity timeout
 - [x] macOS LaunchAgent installer
+- [ ] `/unfry` smart fallback — onboarding message on first use (V2)
+- [ ] `/unfry --brief` auto-highlight — surface top 3 without reading full summary (V2)
+- [ ] `/wrap` delta mode — "what changed since last wrap" (V2)
+- [ ] Multi-stream awareness — load context by branch/topic, not just latest (V2)
 - [ ] Windows support (V2)
 - [ ] Dashboard — cross-project session analytics (V2)
 - [ ] `/unfry` auto-trigger on window open (V2)
