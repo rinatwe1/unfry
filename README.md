@@ -46,8 +46,6 @@ A background process that watches your Claude Code sessions. Triggers automatica
 
 **Best for:** Heavy Claude Code users. Set it once, forget it.
 
-Run in Terminal (or prefix with `!` inside Claude Code):
-
 ```bash
 git clone https://github.com/rinatwe1/unfry.git ~/unfry
 cd ~/unfry/daemon
