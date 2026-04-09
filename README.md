@@ -1,199 +1,203 @@
-# Claude Session Log
+# Unfry
 
-**Version:** 0.1  
-**Purpose:** Automatic conversation logging for Claude Code — never lose context between sessions.
+**Stop supervising your AI. Start using it.**
 
----
+Brain Fry doesn't come from using Claude Code. It comes from managing it — re-explaining context, tracking what happened, keeping state in your head between sessions.
 
-## The Problem
-
-Claude Code is powerful but stateless. Every new window = blank slate.
-
-You make decisions, create files, have breakthroughs — and next session Claude has no idea what happened. You repeat context, re-explain decisions, lose momentum.
-
-**Claude Session Log is the memory layer.**
+Unfry is the memory layer that takes that load off.
 
 ---
 
-## What It Does
+## Two Ways to Use It
 
-- Logs every meaningful Claude Code session to a structured file
-- Extracts key decisions, tasks created, files changed, and next steps
-- Links sessions to projects so context is findable
-- Updates your project files (changelog, tasks, CLAUDE.md) with session insights
-- Works across all Claude Code windows and projects
+### `/unfry` — Manual (30 seconds setup)
+
+A slash command you run at the end of any session.
+Reads the conversation. Extracts what matters. Saves it so the next session starts informed.
+
+```
+Summary / Key Decisions / Insights / Next Steps
+```
+
+**Best for:** Anyone who wants to start. Zero friction, no background process.
+
+### Daemon — Automatic (macOS)
+
+A background process that watches your Claude Code sessions.
+Triggers automatically on compact events and session inactivity.
+Writes summaries without you doing anything.
+
+**Best for:** Heavy Claude Code users. Set it once, forget it.
 
 ---
 
-## How to Install
-
-### Step 1: Clone this repo
+## Install `/unfry` (30 seconds)
 
 ```bash
-git clone https://github.com/rinatwe1/claude-session-log.git
-cd claude-session-log
+mkdir -p ~/.claude/skills/unfry
+curl -o ~/.claude/skills/unfry/SKILL.md \
+  https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/unfry/SKILL.md
 ```
 
-### Step 2: Add CLAUDE.md to your project
+Then in any Claude Code session:
 
-Copy the `CLAUDE.md` from this repo into your project root. It tells Claude to run `/log` at the end of each session.
+```
+/unfry
+```
+
+Claude will summarize the session and offer to save it.
+
+---
+
+## Install `/recall`
+
+Load the previous session's context when you open a new window:
 
 ```bash
-cp CLAUDE.md /path/to/your/project/
+mkdir -p ~/.claude/skills/recall
+curl -o ~/.claude/skills/recall/SKILL.md \
+  https://raw.githubusercontent.com/rinatwe1/unfry/main/skills/recall/SKILL.md
 ```
 
-Or add this block to your existing `CLAUDE.md`:
+Then at the start of a new session:
 
-```markdown
-## Session Logging
-
-At the end of every meaningful session, run `/log`.
-This writes a session summary to `sessions/YYYY-MM-DD-[project].md`.
+```
+/recall
 ```
 
-### Step 3: Copy the `/log` skill
+---
+
+## Install Daemon (macOS only)
 
 ```bash
-mkdir -p ~/.claude/skills/log
-cp skills/log/SKILL.md ~/.claude/skills/log/SKILL.md
+git clone https://github.com/rinatwe1/unfry.git
+cd unfry/daemon
+./install.sh
 ```
 
-That's it. Now run `/log` at the end of any session.
+The install script:
+- Installs Python dependency (`watchdog`)
+- Creates `~/.unfry/` for logs
+- Registers a LaunchAgent that starts on login
+
+### What it does
+
+| Trigger | What happens |
+|---------|-------------|
+| Compact event detected | Summarizes conversation up to compact |
+| 30 min session inactivity | Summarizes and closes the session |
+
+Summaries are saved to `[project-dir]/unfry-sessions/YYYY-MM-DD-[project].md`.
+
+### Daemon commands
+
+```bash
+# Check if running
+launchctl list | grep unfry
+
+# View logs
+tail -f ~/.unfry/daemon.log
+
+# Stop
+launchctl unload ~/Library/LaunchAgents/com.unfry.daemon.plist
+
+# Restart
+launchctl unload ~/Library/LaunchAgents/com.unfry.daemon.plist
+launchctl load ~/Library/LaunchAgents/com.unfry.daemon.plist
+```
 
 ---
 
 ## How It Works
 
+Claude Code stores every session as JSONL in `~/.claude/projects/`. All your decisions, all your context — it's already there. Nobody was doing anything with it.
+
+Unfry reads those files, detects compact boundaries, and calls `claude -p` to generate a structured summary.
+
 ```
-You work with Claude
-        ↓
-End of session → run /log
-        ↓
-Claude asks: which project is this about?
-        ↓
-Claude summarizes: decisions, tasks, files, next steps
-        ↓
-Writes to sessions/YYYY-MM-DD-[project].md
-        ↓
-Offers to update: changelog / tasks / CLAUDE.md
-        ↓
-Next session: Claude reads previous log → instant context
+Claude Code session
+       ↓
+compact event / window closes
+       ↓
+daemon reads JSONL since last compact
+       ↓
+claude -p generates brain dump
+       ↓
+saved to [project]/unfry-sessions/YYYY-MM-DD.md
+       ↓
+/recall at next session → instant context
 ```
 
 ---
 
-## Example Session Log Output
+## Output Format
 
 ```markdown
----
-date: 2026-04-08
-project: spirit
-topics: [taxonomy, lovable, shopify]
-duration: long
----
-
-# Session Log — 2026-04-08 — Spirit
-
-## What We Worked On
-- Finalized taxonomy: 24 categories, 6 event types
-- Completed Lovable prompts A, 7, B for event creation form
-- Fixed Step 7 routing bug (was unreachable)
+## Summary
+- [what was actually accomplished]
+- [specific, not vague]
 
 ## Key Decisions
-- Renamed `performance` → `show`, `online_event` → `online` for consistency
-- Decided NOT to use workspace.yaml (stateless architecture)
-- Spirit Pick badge logic: auto-assigned by admin, not self-selected
+- [decision]: [why]
 
-## Tasks Created
-- [ ] Update instructor-dashboard-spec.md with approval flow
-- [ ] Send instructor specs to Worx (phase 2)
-- [ ] Set up GitHub repo for Spirit specs
-
-## Files Changed
-- Spirit/01_Product/lovable/lovable-event-creation.md
-- Spirit/01_Product/04-event-page-spec.md
-- Spirit/01_Product/02-search-page-spec.md
+## Insights
+- [non-obvious thing that emerged]
 
 ## Next Steps
-- Update instructor dashboard spec (priority: high)
-- GitHub setup for Spirit docs
-- Lovable: add is_spirit_pick + custom_badge to EventCard
-
-## Notes
-Long session, very productive. All Lovable prompts done. Docs sent to Worx.
+1. [most important]
+2. [next]
 ```
 
 ---
 
-## Folder Structure
+## Requirements
+
+- Claude Code installed (`claude` CLI available)
+- Python 3.7+
+- macOS (daemon only — `/unfry` skill works everywhere)
+
+---
+
+## Project Structure
 
 ```
-Claude-Session-Log/
-├── README.md              — This file
-├── CLAUDE.md              — Instructions for Claude (copy to your project)
+unfry/
 ├── skills/
-│   └── log/
-│       └── SKILL.md       — The /log skill (copy to ~/.claude/skills/log/)
-├── hooks/
-│   └── session-end.sh     — Optional: auto-trigger on session end
-├── templates/
-│   └── session-template.md — Session log template
-└── sessions/
-    └── .gitkeep           — Your logs go here (gitignored by default)
+│   ├── unfry/SKILL.md      — /unfry slash command
+│   └── recall/SKILL.md     — /recall slash command
+├── daemon/
+│   ├── daemon.py           — watchdog monitor
+│   ├── summarizer.py       — JSONL reader + Claude summarizer
+│   ├── install.sh          — LaunchAgent installer
+│   └── com.unfry.daemon.plist  — LaunchAgent config template
+└── README.md
 ```
-
----
-
-## Optional: Auto-trigger via Stop Hook
-
-If you want to be prompted to log even when you forget, add the stop hook:
-
-```bash
-# In your Claude Code settings.json, add:
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/path/to/claude-session-log/hooks/session-end.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-This writes a session marker (timestamp + directory) so you never lose track of when sessions happened, even if you didn't run `/log`.
 
 ---
 
 ## Philosophy
 
-Claude Code is not a chatbot. It's a thinking partner.
+The best memory system is the one that works when you're tired, distracted, and moving fast.
 
-But a thinking partner you have to re-introduce yourself to every day is exhausting.
+`/unfry` works because it's one command at the end of a session. The daemon works because it's zero commands.
 
-Session Log turns ephemeral conversations into **institutional memory** — structured, searchable, actionable.
-
-> "The best productivity system is the one that remembers so you don't have to."
+Both exist because the data is already there — Claude Code just wasn't doing anything with it.
 
 ---
 
-## Contributing
+## Status
 
-This is an open-source project. PRs welcome.
-
-Ideas for future versions:
-- Auto-detect project from working directory
-- Parse Claude's output to pre-fill the log
-- Integration with GitHub Issues
-- Weekly digest of session logs
-- Vector search over session history
+- [x] `/unfry` slash command
+- [x] `/recall` slash command  
+- [x] Daemon — compact event detection
+- [x] Daemon — inactivity timeout
+- [x] macOS LaunchAgent installer
+- [ ] Windows support (V2)
+- [ ] Dashboard — cross-project session analytics (V2)
+- [ ] `/recall` auto-trigger on window open (V2)
 
 ---
 
-**Made with Claude Code.**
+**Open source. Early stage. PRs welcome.**
+
+Made with Claude Code, by someone who got tired of explaining themselves every morning.
