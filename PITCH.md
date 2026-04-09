@@ -56,7 +56,7 @@ When a compact happens — it captures the conversation, generates a structured 
 
 When you close a window — same.
 
-When you open a new window and type `/recall` — you get:
+When you open a new window and type `/unfry` — you get:
 - What we worked on last session
 - Key decisions (with the *why*)
 - Exact next steps
@@ -99,7 +99,7 @@ Claude Code stores every conversation in `~/.claude/projects/`. We're not scrapi
 ```
 You work. Unfry captures.
 Session ends → structured log written automatically.
-New session → /recall → instant context.
+New session → /unfry → instant context.
 No explanation. No re-reading. No brain fry.
 ```
 

@@ -106,7 +106,7 @@ This forces users to manually:
 - 3-4 windows open: mental juggling act
 
 **After Unfry:**
-- Start every session: `/recall` → instant context
+- Start every session: `/unfry` → instant context
 - Compact: nothing lost, structured log auto-generated
 - Monday morning: read 5-bullet summary from Friday
 - 3-4 windows: each carries its own memory
@@ -128,7 +128,7 @@ This forces users to manually:
 |---------|-------|
 | Auto-capture on compact | Never lose context mid-session |
 | Auto-capture on window close | Every session documented |
-| `/recall` skill | Instant context on demand |
+| `/unfry` skill | Instant context on demand |
 | Per-project sessions | Right context for right project |
 | Structured logs | Decisions, next steps, files changed |
 
@@ -140,7 +140,7 @@ This forces users to manually:
 | Cross-machine sync | Same context on laptop + desktop | Paid |
 | Team shared context | One source of truth | Paid |
 | Decision timeline | Full history of why decisions were made | Paid |
-| `/recall --team` | Anyone can get project context | Paid |
+| `/unfry --team` | Anyone can get project context | Paid |
 | Weekly digest | "This week's key decisions across projects" | Paid |
 
 ### V2 (Phase 3) — Enterprise
@@ -165,7 +165,7 @@ This forces users to manually:
 | Tier | Price | What's included |
 |------|-------|-----------------|
 | Free | $0 | Local only, 1 machine, 30-day history |
-| Pro | $15/month | Unlimited history, sync, `/recall` advanced |
+| Pro | $15/month | Unlimited history, sync, `/unfry` advanced |
 | Team | $49/month | 5 seats, shared context, team digest |
 
 ### Phase 3: Enterprise (year 2)
@@ -254,7 +254,7 @@ This forces users to manually:
 | Rewind.ai | Records everything on your screen | Not Claude-specific, privacy concerns, expensive |
 | Mem.ai | AI-powered notes with memory | Manual input required, not session-based |
 | Notion AI | Workspace with AI | Not a memory layer, requires manual curation |
-| Claude Projects | Built-in project memory | No session logs, no compact protection, no /recall |
+| Claude Projects | Built-in project memory | No session logs, no compact protection, no /unfry |
 | Nothing | — | **This space is empty** |
 
 **Unfry's moat:**
