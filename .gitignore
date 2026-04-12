@@ -2,5 +2,5 @@
 *.pyc
 __pycache__/
 .env
-sessions/*.md
-!sessions/.gitkeep
+unfry-sessions/
+sessions/
